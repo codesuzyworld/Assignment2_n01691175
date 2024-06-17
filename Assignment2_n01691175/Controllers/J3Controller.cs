@@ -9,25 +9,77 @@ namespace Assignment2_n01691175.Controllers
 {
     public class J3Controller : ApiController
     {
-
-        // order the array -> INDEX: 0- gold 1- silver 2- bronze 
-        // S = scores[2] P = scores.Count
-        //http://localhost:12180/api/J3/Bronze/4/70,62,58,73 - 73 70 62 58
-
+        /// <summary>
+        /// This method takes in the amount of participants and their scores, then outputs the score needed for the bronze award
+        /// and the amount of participants having this score. 
+        /// </summary>
+        /// <param name="N"> a single integer representing a participant's score</param>
+        /// <param name="scoreInput">all the participant's scores, separated by "," </param>
+        /// <returns>
+        /// A non negative integer S, score required for bronze level
+        /// A positive integer P, how many participants achieved this score
+        /// </returns>
+        /// <example>
+        ///http://localhost:12180/api/J3/Bronze/4/70,62,58,73  
+        ///--> The score required for bronze level is 62 and 1 number of participant achieved this score.
+        ///http://localhost:12180/api/J3/Bronze/4/8,75,70,60,70,70,60,75,70
+        ///--> The score required for bronze level is 60 and 2 number of participant achieved this score.
+        /// </example>
+ 
         [HttpGet]
-        [Route("api/J3/Bronze/{N}/{score}")]
+        [Route("api/J3/Bronze/{N}/{scoreInput}")]
         public string Bronze(int N, string scoreInput)
         {
+            //Turn the string that the user inputted into a string array
             string[] scoreString = scoreInput.Split(',');
-            List<int> scoreList = new List<int>();
 
-            foreach (string score in scoreString)
+            //Turn the string array called scoreString into an integer array called scoreList
+            int[] scoreList = new int[scoreString.Length];
+           
+            for (int i=0; i<scoreString.Length; i++ )
             {
-            
-                string message = "The score required for bronze level is " + S.ToString() + " and " + P.ToString() + " number of participant achieved this score.";
+                scoreList[i] = int.Parse(scoreString[i]);
+            }
+
+            //Sort the array
+            Array.Sort(scoreList);
+            Array.Reverse(scoreList);
+
+            //Count only the distinct scores.
+            List<int> unique = new List<int>();
+
+            foreach (int score in scoreList)
+            {
+                if (!unique.Contains(score))
+                {
+                    unique.Add(score);
+                }
 
             }
 
+            //Count how many people achieved the bronze score by creating a list
+            List<int> bronzeAchieve = new List<int>();
+            foreach (int score in scoreList)
+            {
+                if (score == unique[2])
+                {
+                    bronzeAchieve.Add(score);
+                }
+            }
+
+            int S = unique[2];
+
+            int P = bronzeAchieve.Count; 
+            
+            string successMessage = "The score required for bronze level is " + S.ToString() + " and " + P.ToString() + " number of participant achieved this score.";
+            string failMessage = "There are not enough participants for the bronze prize. Please add more participants.";
+
+            if (unique.Count < 3)
+            {
+                return failMessage;
+            }
+           
+            return successMessage;
 
             /*Use LINQ instead of loop to create the list
             List<int> scoresListAscend = scoresString.Select(int.Parse).ToList();
