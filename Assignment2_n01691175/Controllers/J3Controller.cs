@@ -41,7 +41,15 @@ namespace Assignment2_n01691175.Controllers
                 scoreList[i] = int.Parse(scoreString[i]);
             }
 
-            //Sort the array
+            //If there is less than 3 participants, there will be no bronze reward holders. 
+            string failMessage = "There are not enough participants for the bronze prize. Please add more participants.";
+
+            if (scoreList.Length < 3)
+            {
+                return failMessage;
+            }
+
+            //Sort the array from scores large to small
             Array.Sort(scoreList);
             Array.Reverse(scoreList);
 
@@ -67,20 +75,21 @@ namespace Assignment2_n01691175.Controllers
                 }
             }
 
+            // S is the score needed to get the bronze award
             int S = unique[2];
 
+            // P is the amount of people that got the bronze award
             int P = bronzeAchieve.Count; 
             
+            //Output final message. 
             string successMessage = "The score required for bronze level is " + S.ToString() + " and " + P.ToString() + " number of participant achieved this score.";
-            string failMessage = "There are not enough participants for the bronze prize. Please add more participants.";
+            
 
-            if (unique.Count < 3)
-            {
-                return failMessage;
-            }
+
            
             return successMessage;
 
+            //ALTERNATIVE METHOD with LINQ
             /*Use LINQ instead of loop to create the list
             List<int> scoresListAscend = scoresString.Select(int.Parse).ToList();
 

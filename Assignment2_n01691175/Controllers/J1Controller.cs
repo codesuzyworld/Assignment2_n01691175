@@ -30,6 +30,7 @@ namespace Assignment2_n01691175.Controllers
         /// -> "This customer chose 0 red plates, 2 green plates, and 4 blue plates.
         ///    Therefore, the cost of the meal in dollars is 0 x 3 + 2 X 4 + 4 X 5 = 28."
         /// </example>
+       
         [HttpGet]
         [Route("api/J1/Sushi/{R}/{G}/{B}")]
         public string Sushi(int R, int G, int B)
